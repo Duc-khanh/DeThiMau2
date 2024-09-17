@@ -8,39 +8,28 @@ public class CRUDStudent {
        studentList = new Sturdent[100];
        numberOfStudent = 0;
    }
-   // thêm 1 hs vào ds
-    public boolean addSturdent ( Sturdent objSturdent) {
-        if (numberOfStudent< studentList.length){
-            studentList[numberOfStudent] = objSturdent;
-            numberOfStudent++;
-            return true;
-        }
-        return false;
-    }
-    // lưu 1 hs với file
-    public boolean addSturdentToFile(Sturdent objSturdent, String filename) {
-       try ( ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream(filename))) {
-           oos.writeObject(objSturdent);
+
+
+    public boolean addStudent(Sturdent objStudent){
+       if(numberOfStudent < studentList.length){
+           studentList[numberOfStudent] = objStudent;
+           numberOfStudent++;
+           System.out.println("them thanh cong");
            return true;
-       } catch (IOException e) {
-           e.printStackTrace();
-           return false;
        }
-    }
-    // pt trả về 1 đối tượng sinh viên từ file
-    public Sturdent getStudentFromFile(String filename) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            return (Sturdent) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+       return false;
     }
 
-    // pt lưu danh sách sinh viên vào file
-    public boolean addStudentListToFile(Sturdent[] listStudent, String filename) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
-            oos.writeObject(listStudent);
+
+    public boolean addStudentToFile(Sturdent objStudent, String filename){
+
+        try {
+            FileOutputStream fos = new FileOutputStream(filename);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(objStudent);
+            oos.close();
+            fos.close();
+            System.out.println("them thanh cong");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,17 +37,51 @@ public class CRUDStudent {
         return false;
     }
 
-    // pt trả về danh sách sinh viên từ file
-    public Sturdent[] getAllStudentFromFile(String filename) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            return (Sturdent[]) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public Sturdent getStudentFromFile(String filename){
+       try {
+           FileInputStream fis = new FileInputStream(filename);
+           ObjectInputStream ois = new ObjectInputStream(fis);
+           Sturdent sturdent = (Sturdent) ois.readObject();
+           ois.close();
+           fis.close();
+           return sturdent;
+       } catch (Exception e) {
+           e.printStackTrace();
+           return null;
+       }
     }
 
+    public boolean addStudentListToFile(Sturdent[] listStudent, String filename) {
+        try {
+            FileOutputStream fos = new FileOutputStream(filename);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(listStudent);
+            oos.close();
+            fos.close();
+            System.out.println("them thanh cong");
+            return true;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public Sturdent[] getAllStudentFromFile(String filename){
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Sturdent[] sturdents = (Sturdent[]) ois.readObject();
 
+
+            ois.close();
+            fis.close();
+            return sturdents;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }
